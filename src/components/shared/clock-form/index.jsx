@@ -12,16 +12,18 @@
 import { useEffect, useState } from "react";
 
 import { TIMEZONE_OFFSET } from "../../../constants/constants";
-import { getOffset, getTimezoneOffset } from "../../../utils/timezone";
-import Button from "../../ui/Button.styled";
-import InputStyled from "../../ui/Input.styled";
-import SelectStyled from "../../ui/Select.styled";
+
+import FormOfModal from "../../ui/Form/Form";
+import Modal from "../modal";
 
 const ClockFrom = ({
   values = { title: "", timeZone: "UTC", offset: 0 },
   handelClock,
   title = true,
   edit = false,
+  toggleModalEdit,
+  toggleModalCreate,
+  isEdit,
 }) => {
   const [formValues, SetFormValues] = useState({ ...values });
 
@@ -51,11 +53,33 @@ const ClockFrom = ({
   const handelSubmit = (e) => {
     e.preventDefault();
     handelClock(formValues);
+    if (isEdit) {
+      toggleModalEdit(false);
+      alert("Your Clock edited");
+    }
+    toggleModalCreate(false);
+    alert("Congratulations You Created a New Clock");
   };
 
   return (
     <div>
-      <form onSubmit={handelSubmit}>
+      {/* <Modal
+        onSubmit={handelSubmit}
+        onChange={handelChange}
+        formValues={formValues}
+        title={title}
+        edit={edit}
+      /> */}
+      <FormOfModal
+        onSubmit={handelSubmit}
+        onChange={handelChange}
+        formValues={formValues}
+        title={title}
+        edit={edit}
+        toggleModalEdit={toggleModalEdit}
+        toggleModalCreate={toggleModalCreate}
+      />
+      {/* <form onSubmit={handelSubmit}>
         <div>
           <label htmlFor="title"> Enter Title: </label>
           <br />
@@ -110,8 +134,8 @@ const ClockFrom = ({
         ) : (
           <Button color="#4facc4">Create</Button>
         )}
-        {/* <Button color="red">{edit ? "Update" : "Create"}</Button> */}
-      </form>
+       
+      </form>  */}
     </div>
   );
 };

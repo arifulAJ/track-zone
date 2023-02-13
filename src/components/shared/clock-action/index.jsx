@@ -1,51 +1,61 @@
 import { useState } from "react";
 import Button from "../../ui/Button.styled";
 import ClockFrom from "../clock-form";
-
-const ClockAction = ({ local = false, clock, updateClock }) => {
+import "./index.css";
+const ClockAction = ({
+  local = false,
+  clock,
+  updateClock,
+  createClock,
+  deleteClock,
+}) => {
   const [isEdit, setIsEdit] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
 
-  // const handelChange = (e) => {
-  //   let { value, name } = e.target;
-
-  //   if (name === "offset") {
-  //     value = Number(value) * 60;
-  //   }
-  //   updateClock({
-  //     [name]: value,
-  //   });
-  // };
   const handelClock = (values) => {
-    console.log(values);
+    createClock(values);
   };
+  const toggleModalEdit = () => {
+    setIsEdit(!isEdit);
+  };
+  const toggleModalCreate = () => {
+    setIsCreate(!isCreate);
+  };
+
   return (
     <div>
-      <Button color="#e2aa50" onClick={() => setIsEdit(!isEdit)}>
+      <Button color="#e2aa50" onClick={toggleModalEdit}>
         Edit
       </Button>
       {local ? (
-        <Button color="#4facc4" onClick={() => setIsCreate(!isCreate)}>
+        <Button color="#4facc4" onClick={toggleModalCreate}>
           Create
         </Button>
       ) : (
-        <Button color="#E53D30">Delete</Button>
+        <Button onClick={() => deleteClock(clock.id)} color="#E53D30">
+          Delete
+        </Button>
       )}
       {isEdit && (
-        <>
-          <h3>Edit Clock</h3>
+        <div className="">
+          <h3 className="text">Edit Clock</h3>
           <ClockFrom
             values={clock}
             handelClock={updateClock}
             title={!local}
             edit={true}
+            toggleModalEdit={toggleModalEdit}
+            isEdit={isEdit}
           />
-        </>
+        </div>
       )}
       {isCreate && (
         <>
           <h3>Create Clock</h3>
-          <ClockFrom handelClock={handelClock} />
+          <ClockFrom
+            handelClock={handelClock}
+            toggleModalCreate={toggleModalCreate}
+          />
         </>
       )}
     </div>
